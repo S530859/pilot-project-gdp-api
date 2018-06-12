@@ -22,3 +22,20 @@ var signup = function (req, res) {
     });
   };
   module.exports.signup = signup;
+
+  /**
+ * Signup
+ */
+var getUsersList = function (req, res) {
+    
+    User.find({ },'-__v -modifiedDate -createdDate -password -salt')
+       .exec(function (err, userDetail) {
+      if (err) {/*
+        console.log(err)*/
+        res.status(389).json({message : err});
+      } else {
+       res.status(200).json({message : "User listfetched succeessfully", data:userDetail});
+      }
+    });
+  };
+  module.exports.getUsersList = getUsersList;
