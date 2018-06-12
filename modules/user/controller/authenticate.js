@@ -4,7 +4,6 @@ var User = require('../model/user.js');
  * Signup
  */
 var signup = function (req, res) {
-    console.log(req.body)
     // Init user and add missing fields
     var user = new User(req.body);
     user.dob = new Date();
