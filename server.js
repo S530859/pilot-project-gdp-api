@@ -21,8 +21,8 @@ app.use(session({resave: true, saveUninitialized: true,secret: 'gdp'}));
 
 // view engine setup
 app.set("views", path.resolve(__dirname, "views")); // path to views
-app.use(express.static(path.join(__dirname, 'frontend/dist')));
-app.set('views', path.join(__dirname, 'frontend/dist'));
+app.use(express.static(path.join(__dirname, 'views')));
+app.set('views', path.join(__dirname, 'views'));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
@@ -67,7 +67,7 @@ app.set('port', (process.env.PORT || 4003));
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-    res.redirect("/404");
+    res.render("404");
 });
 
 
