@@ -25,7 +25,6 @@
     "express-session": "^1.15.6",
     "jsonwebtoken": "^8.2.1",
     "moment": "^2.22.0",
-    "mongodb": "^3.0.10",
     "mongoose": "^5.1.5"
   }
 }

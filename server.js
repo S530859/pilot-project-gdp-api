@@ -8,12 +8,12 @@ const config = require('./config/config')
 const dbCon = require('./config/database')
 const app = express()
 
-console.log(config)
+//load routes files
+var user = require('./modules/user/user.route');
+
 // parse body params and attache them to req.body
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-
 
 //enabling express session
 app.use(session({resave: true, saveUninitialized: true,secret: 'gdp'}));
@@ -26,6 +26,10 @@ app.set('views', path.join(__dirname, 'frontend/dist'));
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
+//server routes
+app.use('/api/user', user);
+
+//token authorization if required
 app.use(function (req, res, next) {
   var token = (req.headers && req.headers.accesstoken) || (req.query && req.query.accessToken);
   if (token && token.length) {
