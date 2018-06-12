@@ -1,0 +1,57 @@
+//DB Name: professionalInventory
+
+//Check User Grants
+SHOW GRANTS FOR 'citeuser';
+
+//Check User Grants
+GRANT ALL PRIVILEGES ON professionalInventory.* TO 'citeuser'@'%';
+
+FLUSH PRIVILEGES;
+
+//For LTI authorisation
+CREATE TABLE lti_auth (
+  nwID INT NOT NULL,
+  accessToken VARCHAR(200) NOT NULL,
+  refreshToken VARCHAR(200) NOT NULL,
+  dateCreated DATETIME NOT NULL,
+  dateUpdated DATETIME NOT NULL,
+  expiryDate DATETIME NOT NULL,
+  PRIMARY KEY (nwID));
+
+//Users table
+
+CREATE TABLE skillsExperience(
+  id INT NOT NULL AUTO_INCREMENT,
+  nwID VARCHAR(200) NOT NULL,
+  courseID VARCHAR(200) NOT NULL,
+  skill VARCHAR(200) NOT NULL,
+  outcomeName VARCHAR(1000) NOT NULL,
+  assessmentTitle VARCHAR(1000) NOT NULL,
+  scorePossible INT NOT NULL,
+  scoreMastered INT NOT NULL,
+  type ENUM('skill', 'experience'),
+  isDelete INT DEFAULT 0,
+  dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id));
+
+CREATE TABLE users(
+  id INT NOT NULL AUTO_INCREMENT,
+  nwID VARCHAR(200) NOT NULL UNIQUE,
+  password VARCHAR(200) NOT NULL,
+  accessToken VARCHAR(200),
+  type ENUM('ADMIN', 'USER') DEFAULT 'USER',
+  isDelete INT DEFAULT 0,
+  dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id));
+
+
+SELECT AVG(score),skill
+FROM skillsExperience
+WHERE type = 'skill'
+GROUP BY skill;
+
+
+SELECT count(id),skill
+FROM skillsExperience
+WHERE type = 'experience'
+GROUP BY skill;
