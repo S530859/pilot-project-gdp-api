@@ -9,7 +9,9 @@ const dbCon = require('./config/database')
 const app = express()
 
 //load routes files
-var user = require('./modules/user/user.route');
+var userRoutes = require('./modules/user/user.route');
+//model
+var User = require('./modules/user/model/user.js');
 
 // parse body params and attache them to req.body
 app.use(bodyParser.json());
@@ -27,32 +29,27 @@ app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
 //server routes
-app.use('/api/user', user);
+app.use('/api/user', userRoutes);
 
 //token authorization if required
 app.use(function (req, res, next) {
   var token = (req.headers && req.headers.accesstoken) || (req.query && req.query.accessToken);
   if (token && token.length) {
     jwt.verify(token, config.jwtTokenSecret, function(err, decoded) {
-      // if(err || !decoded){
-      //   return res.json({
-      //     code : 400,message : 'Unauthorized user'
-      //   })
-      // }
-      // //req.user
-      // var sql = "SELECT * from  users WHERE accessToken='" + token+"'";
-
-      // dbCon.query(sql, function (err, result) {
-      //     if (err) {
-      //       return res.json({
-      //         code : 400,message : 'Unauthorized user'
-      //       })
-      //     } else {
-      //         req.user = result[0];
-      //         next();
-      //     }
-      // });
-      
+      if(err || !decoded){
+        return res.status(400).json({message : 'Unauthorized user'})
+      }
+      //req.user
+      User.findOne({
+        token: token
+      },'-__v -modifiedDate -createdDate')
+      .exec(function (err, user) {
+        if (err) {
+          return res.status(389).json({message : err});
+        }
+        req.user = user;
+        next();
+      });
     });
     
   } else {
