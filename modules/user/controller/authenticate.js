@@ -49,6 +49,7 @@ var saveTokenNRespond = function (req, res,next) {
   var token = jwt.sign({ expiresIn: '2d', data: req.session.user },'pilot'); 
   var user = new User(req.session.user);
   user.token = token
+
   user.save(function (err) {
     if (err) {/*
       console.log(err)*/

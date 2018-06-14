@@ -60,7 +60,7 @@ var UserSchema = new Schema({
  */
 UserSchema.pre('save', function (next) {
     var modelData = this;
-    if (modelData.password && modelData.isModified('password')) {
+    if (!modelData.salt && modelData.password && modelData.isModified('password')) {
         modelData.salt = crypto.randomBytes(16).toString('base64');
         modelData.password = modelData.hashPassword(modelData.password);
         next();
