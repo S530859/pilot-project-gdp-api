@@ -37,7 +37,8 @@ var signin = function (req, res,next) {
         return res.status(389).json({message : "Please contact admin."});
       }
       req.session.user = user;
-      next();
+      res.status(200).json({message : "User signed in succeessfully"});
+      
     });
 };
 module.exports.signin = signin;
